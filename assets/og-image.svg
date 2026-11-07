@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#000"/>
+  <g stroke="#ffffff" stroke-opacity="0.06">
+    <path d="M0 96H1200M0 192H1200M0 288H1200M0 384H1200M0 480H1200M0 576H1200"/>
+    <path d="M96 0V630M192 0V630M288 0V630M384 0V630M480 0V630M576 0V630M672 0V630M768 0V630M864 0V630M960 0V630M1056 0V630M1152 0V630"/>
+  </g>
+  <g fill="none" stroke-width="2">
+    <path d="M760 470V300l170-120 170 120v170" stroke="#fff" stroke-opacity="0.7"/>
+    <path d="M860 470V370h140v100" stroke="#c9a96e"/>
+  </g>
+  <text x="96" y="300" fill="#fff" font-family="Montserrat, sans-serif" font-weight="200" font-size="72" letter-spacing="2">Richmarc Homes</text>
+  <text x="96" y="360" fill="#9b9b9b" font-family="Montserrat, sans-serif" font-weight="300" font-size="28">Luxury homes, designed and built in house</text>
+  <rect x="96" y="400" width="64" height="2" fill="#c9a96e"/>
+</svg>

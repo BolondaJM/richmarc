@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Available homes | Richmarc Homes</title>
+  <meta name="description" content="Browse luxury residences for sale, under construction and coming soon. Filter by status, bedrooms and price.">
+  <meta name="theme-color" content="#000000">
+  <meta property="og:title" content="Available homes | Richmarc Homes">
+  <meta property="og:description" content="Luxury residences for sale, under construction and coming soon.">
+  <meta property="og:image" content="assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="listings">
+  <div data-header></div>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="grid-lines" aria-hidden="true"></div>
+      <div class="container">
+        <div class="page-hero__inner">
+          <nav class="breadcrumb caption-5 mono" aria-label="Breadcrumb">
+            <a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Homes</span>
+          </nav>
+          <h1 class="heading-1 gradient-text reveal">Available homes</h1>
+          <p class="body-3 text-2 reveal" style="--delay:80ms">Finished residences ready to move into, homes under construction where you still choose the finishes, and releases coming soon.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0" aria-label="Listings">
+      <div class="container">
+        <div class="toolbar" role="toolbar" aria-label="Filter homes">
+          <div class="chips" data-status-filter>
+            <button class="chip button-sm" type="button" aria-pressed="true" data-value="all">All</button>
+            <button class="chip button-sm" type="button" aria-pressed="false" data-value="For sale">For sale</button>
+            <button class="chip button-sm" type="button" aria-pressed="false" data-value="Under construction">Under construction</button>
+            <button class="chip button-sm" type="button" aria-pressed="false" data-value="Coming soon">Coming soon</button>
+          </div>
+          <div class="toolbar__right">
+            <label class="visually-hidden" for="beds">Minimum bedrooms</label>
+            <select class="select-pill" id="beds" data-beds>
+              <option value="0">Any beds</option>
+              <option value="4">4+ beds</option>
+              <option value="5">5+ beds</option>
+              <option value="6">6+ beds</option>
+            </select>
+            <label class="visually-hidden" for="sort">Sort homes</label>
+            <select class="select-pill" id="sort" data-sort>
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price, low to high</option>
+              <option value="price-desc">Price, high to low</option>
+              <option value="area-desc">Largest first</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="results-count caption-4 mono" aria-live="polite" data-count-label>Loading homes</p>
+        <div class="property-grid" data-listings></div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <div class="cta reveal">
+          <div class="grid-lines" aria-hidden="true"></div>
+          <h2 class="heading-3 gradient-text">Not seeing the right home?</h2>
+          <p class="body-3 text-2">Register your brief and we will show you releases before they go public, or design one from scratch.</p>
+          <a class="btn btn--primary btn--lg button-md" href="contact.html"><span class="btn__label">Book a private consultation</span><i class="ph-light ph-arrow-up-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div data-footer></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/listings.js"></script>
+</body>
+</html>

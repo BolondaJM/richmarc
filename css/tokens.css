@@ -1,0 +1,80 @@
+/* ==========================================================================
+   Richmarc — design tokens
+   Inspired by the reference site: pure black field, white Montserrat set in
+   light weights, generous negative space. A single champagne accent and a
+   mono face for data readouts add the futuristic layer.
+   ========================================================================== */
+
+:root {
+  /* ---- Color: surfaces (flat, no gradients) ---- */
+  --bg: #000000;
+  --surface-warm: #131209;
+  --surface-1: #181818;
+  --surface-2: #1f1f1f;
+  --surface-3: #272727;
+  --surface-4: #313131;
+
+  /* ---- Color: text ---- */
+  --text: #ffffff;
+  --text-2: #b8b8b8;
+  --text-3: #8a8a8a;
+  --text-muted: rgba(255, 255, 255, 0.3);
+
+  /* ---- Color: accent (champagne) ---- */
+  --accent: #c9a96e;
+  --accent-strong: #dcc08a;
+  --accent-ink: #131209;
+  --accent-soft: rgba(201, 169, 110, 0.12);
+
+  /* ---- Color: lines and states ---- */
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.2);
+  --glass: rgba(24, 24, 24, 0.62);
+  --danger: #ef8a7a;
+  --success: #8fd1a8;
+
+  /* ---- Type families ---- */
+  --font-sans: "Montserrat", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  /* ---- Spacing scale (only these values) ---- */
+  --sp-25: 2px;
+  --sp-50: 4px;
+  --sp-75: 8px;
+  --sp-100: 12px;
+  --sp-200: 16px;
+  --sp-300: 24px;
+  --sp-400: 32px;
+  --sp-500: 40px;
+  --sp-600: 48px;
+  --sp-700: 64px;
+  --sp-800: 80px;
+  --sp-900: 96px;
+
+  /* ---- Radius (Tailwind steps) ---- */
+  --r-sm: 2px;
+  --r: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-2xl: 16px;
+  --r-3xl: 24px;
+  --r-full: 9999px;
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 500ms;
+  --dur-fast: 300ms;
+  --dur-reveal: 700ms;
+
+  /* ---- Layout ---- */
+  --container: 1240px;
+  --gutter: var(--sp-300);
+  --nav-h: 64px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: var(--sp-200);
+  }
+}
