@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book a consultation | Richmarc Homes</title>
+  <meta name="description" content="Book a free private consultation to buy a luxury home or plan a custom build. We reply within one business day.">
+  <meta name="theme-color" content="#000000">
+  <meta property="og:title" content="Book a consultation | Richmarc Homes">
+  <meta property="og:image" content="assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="contact">
+  <div data-header></div>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="grid-lines" aria-hidden="true"></div>
+      <div class="container">
+        <div class="page-hero__inner">
+          <nav class="breadcrumb caption-5 mono" aria-label="Breadcrumb">
+            <a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Contact</span>
+          </nav>
+          <h1 class="heading-1 gradient-text reveal">Book a private<br>consultation</h1>
+          <p class="body-3 text-2 reveal" style="--delay:80ms">A free, one hour conversation at our studio, on your land or by video. Tell us a little about what you are picturing and we will reply within one business day.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="container contact-layout">
+        <div class="contact-info reveal">
+          <div class="contact-info__item">
+            <i class="ph-light ph-buildings" aria-hidden="true"></i>
+            <div><h2 class="title-3">Studio</h2><p class="body-6 text-2">{{studio address}}<br>Monday to Saturday, 9am to 6pm</p></div>
+          </div>
+          <div class="contact-info__item">
+            <i class="ph-light ph-envelope-simple" aria-hidden="true"></i>
+            <div><h2 class="title-3">Email</h2><p class="body-6 text-2"><a href="mailto:hello@richmarchomes.com">hello@richmarchomes.com</a></p></div>
+          </div>
+          <div class="contact-info__item">
+            <i class="ph-light ph-phone" aria-hidden="true"></i>
+            <div><h2 class="title-3">Phone</h2><p class="body-6 text-2">{{phone number}}</p></div>
+          </div>
+          <div class="contact-info__item">
+            <i class="ph-light ph-video-camera" aria-hidden="true"></i>
+            <div><h2 class="title-3">Video consultations</h2><p class="body-6 text-2">Available for overseas and interstate buyers, any time zone.</p></div>
+          </div>
+        </div>
+
+        <form class="panel form reveal" style="--delay:90ms" data-validate data-contact-form>
+          <div class="form__row">
+            <div class="field">
+              <label class="caption-1" for="c-name">Full name *</label>
+              <input id="c-name" name="name" type="text" autocomplete="name" required placeholder="Alex Morgan">
+              <span class="field__error caption-5" role="alert"></span>
+            </div>
+            <div class="field">
+              <label class="caption-1" for="c-email">Email *</label>
+              <input id="c-email" name="email" type="email" autocomplete="email" required placeholder="alex@example.com">
+              <span class="field__error caption-5" role="alert"></span>
+            </div>
+          </div>
+          <div class="form__row">
+            <div class="field">
+              <label class="caption-1" for="c-phone">Phone</label>
+              <input id="c-phone" name="phone" type="tel" autocomplete="tel" placeholder="Optional">
+              <span class="field__error caption-5" role="alert"></span>
+            </div>
+            <div class="field">
+              <label class="caption-1" for="c-interest">I am interested in *</label>
+              <select id="c-interest" name="interest" required data-required-msg="Choose whether you want to buy, build or are not sure yet.">
+                <option value="">Choose one</option>
+                <option value="buy">Buying a finished home</option>
+                <option value="build">Building a custom home</option>
+                <option value="both">Not sure yet</option>
+              </select>
+              <span class="field__error caption-5" role="alert"></span>
+            </div>
+          </div>
+          <div class="form__row">
+            <div class="field">
+              <label class="caption-1" for="c-budget">Budget range</label>
+              <select id="c-budget" name="budget">
+                <option value="">Prefer not to say</option>
+                <option>Under $3M</option>
+                <option>$3M to $5M</option>
+                <option>$5M to $8M</option>
+                <option>Over $8M</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="caption-1" for="c-meet">Preferred meeting</label>
+              <select id="c-meet" name="meeting">
+                <option>At the studio</option>
+                <option>On my land</option>
+                <option>Video call</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="caption-1" for="c-msg">Tell us about your plans</label>
+            <textarea id="c-msg" name="message" placeholder="Number of bedrooms, the feeling you want, your timing, anything at all"></textarea>
+          </div>
+          <button class="btn btn--primary btn--lg button-md" type="submit"><span class="btn__label">Book my consultation</span><i class="ph-light ph-arrow-up-right" aria-hidden="true"></i></button>
+          <div class="form__status" role="status"></div>
+          <p class="form__fine caption-5">We use your details only to arrange your consultation. See our <a href="privacy.html">privacy policy</a>.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div data-footer></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    /* Prefill interest and estimate from the build page */
+    (function () {
+      const p = new URLSearchParams(location.search);
+      const interest = p.get("interest");
+      if (interest) document.getElementById("c-interest").value = interest;
+      const size = p.get("size");
+      const tier = p.get("tier");
+      if (size && tier) {
+        document.getElementById("c-msg").value = `From the estimator: about ${Number(size).toLocaleString("en-US")} sq ft, ${tier} finish level.`;
+      }
+    })();
+  </script>
+</body>
+</html>
