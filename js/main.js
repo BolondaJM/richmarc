@@ -6,6 +6,20 @@
 (function () {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const page = document.body.dataset.page || "";
+  const SETTINGS = Object.assign(
+    {
+      email: "hello@richmarchomes.com",
+      phone: "{{phone number}}",
+      phoneHref: "+10000000000",
+      footerBlurb: "Luxury homes, designed and built in house. Buy one ready to move into or build one around the way you live.",
+      instagram: "https://www.instagram.com/",
+      linkedin: "https://www.linkedin.com/",
+      pinterest: "https://www.pinterest.com/"
+    },
+    (window.RICHMARC_CONTENT && window.RICHMARC_CONTENT.settings) || {}
+  );
+  const esc = (v) =>
+    String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
   /* ---------------------------------------------------------------------
      Shared layout
@@ -63,7 +77,7 @@
             <div class="footer__col">
               <a class="brand" href="index.html">${LOGO}<span>Richmarc</span></a>
               <p class="body-6 text-2" style="max-width:320px;margin-top:var(--sp-200)">
-                Luxury homes, designed and built in house. Buy one ready to move into or build one around the way you live.
+                ${esc(SETTINGS.footerBlurb)}
               </p>
             </div>
             <div class="footer__col">
@@ -76,14 +90,14 @@
             <div class="footer__col">
               <h3 class="caption-3 mono">Studio</h3>
               <a class="body-6" href="contact.html">Book a consultation</a>
-              <a class="body-6" href="mailto:hello@richmarchomes.com">hello@richmarchomes.com</a>
-              <a class="body-6" href="tel:+10000000000">{{phone number}}</a>
+              <a class="body-6" href="mailto:${esc(SETTINGS.email)}">${esc(SETTINGS.email)}</a>
+              <a class="body-6" href="tel:${esc(SETTINGS.phoneHref)}">${esc(SETTINGS.phone)}</a>
             </div>
             <div class="footer__col">
               <h3 class="caption-3 mono">Follow</h3>
-              <a class="body-6" href="https://www.instagram.com/" rel="noopener" target="_blank">Instagram</a>
-              <a class="body-6" href="https://www.linkedin.com/" rel="noopener" target="_blank">LinkedIn</a>
-              <a class="body-6" href="https://www.pinterest.com/" rel="noopener" target="_blank">Pinterest</a>
+              ${SETTINGS.instagram ? `<a class="body-6" href="${esc(SETTINGS.instagram)}" rel="noopener" target="_blank">Instagram</a>` : ""}
+              ${SETTINGS.linkedin ? `<a class="body-6" href="${esc(SETTINGS.linkedin)}" rel="noopener" target="_blank">LinkedIn</a>` : ""}
+              ${SETTINGS.pinterest ? `<a class="body-6" href="${esc(SETTINGS.pinterest)}" rel="noopener" target="_blank">Pinterest</a>` : ""}
             </div>
           </div>
           <div class="footer__wordmark" aria-hidden="true">Richmarc</div>
@@ -108,6 +122,15 @@
 
   renderHeader();
   renderFooter();
+
+  /* Fill [data-setting] elements (contact page, legal pages) from site settings */
+  document.querySelectorAll("[data-setting]").forEach((el) => {
+    const key = el.dataset.setting;
+    if (SETTINGS[key] == null) return;
+    el.textContent = SETTINGS[key];
+    if (key === "email" && el.tagName === "A") el.href = "mailto:" + SETTINGS.email;
+    if (key === "phone" && el.tagName === "A") el.href = "tel:" + (SETTINGS.phoneHref || SETTINGS.phone);
+  });
 
   /* ---------------------------------------------------------------------
      Navigation: mobile menu + hide on scroll down

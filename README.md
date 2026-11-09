@@ -5,10 +5,25 @@ A static luxury home build and sales site in plain HTML, CSS and JavaScript. No 
 ## Run it locally
 
 ```bash
-python -m http.server 5173
+python server.py
 ```
 
-Then open http://localhost:5173. (Opening the files directly also works, but the 404 page uses root paths and expects a server.)
+Then open http://localhost:5173. The server uses only the Python standard library.
+
+## Admin panel
+
+Open http://localhost:5173/admin/ and sign in. The first test login is **admin / admin**; the panel shows a warning until you change it under Account.
+
+From the panel you can add, edit, reorder, duplicate and delete:
+
+- Homes (all fields, cover photo, gallery, features; photos can be uploaded)
+- Testimonials, FAQs and home page stats
+- Custom build estimator tiers and extras
+- Site settings: email, phone, studio address, hours, footer text, social links
+
+Edits stay in the browser until you click **Publish changes** (or Ctrl+S). Publishing writes `data/content.json`, keeps a timestamped backup in `data/backups/` (last 30), and regenerates `js/content.js`, which every page loads. Because the public pages only read that generated file, they can still be deployed to any static host; only editing needs `server.py` running.
+
+Credentials are stored hashed (PBKDF2) in `data/admin.json`, which is git-ignored and never served. Delete that file to reset the login to admin / admin. The server binds to 127.0.0.1; put it behind HTTPS before exposing it to the internet.
 
 ## Structure
 
@@ -28,8 +43,13 @@ css/
   components.css  Nav, buttons, cards, forms, FAQ, footer, cookie banner, reveals
   pages.css       Page specific layouts
 
+server.py         Static server + admin API (login, save content, image upload)
+admin/            Admin panel (index.html, admin.css, admin.js)
+data/content.json ALL content: listings, stats, testimonials, FAQs, build rates, settings (sample data)
+
 js/
-  data.js         ALL content: listings, stats, testimonials, FAQs, build rates (sample data)
+  content.js      Generated from data/content.json on every publish. Do not edit by hand
+  data.js         Shapes the content for the page scripts
   render.js       Property card + skeleton renderers, price formatting
   main.js         Shared nav/footer, mobile menu, scroll reveals, tagline word reveal, counters, FAQ, cookie consent, form validation
   hero-canvas.js  Animated wireframe house in the hero
@@ -53,8 +73,8 @@ assets/
 
 ## Before launch
 
-1. Replace the sample content in `js/data.js` (listings, prices, stats, testimonials, build rates).
-2. Fill the placeholders marked `{{...}}`: phone number, studio address, company legal name.
+1. Change the admin password, then replace the sample content from the admin panel (listings, prices, stats, testimonials, build rates).
+2. Fill the placeholders marked `{{...}}`: phone number and studio address (Site settings in the admin), company legal name (privacy.html, terms.html).
 3. Swap the Unsplash photos for your own photography.
 4. Connect the forms in `js/main.js` (search for "Demo submit") to a real endpoint.
 5. Have the privacy policy and terms reviewed.

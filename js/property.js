@@ -28,9 +28,10 @@
     return;
   }
 
-  document.title = `${p.name} | Richmarc Homes`;
+  const rp = (window.RICHMARC.raw.properties || []).find((x) => x.id === p.id) || p;
+  document.title = `${rp.name} | Richmarc Homes`;
   const meta = document.querySelector('meta[name="description"]');
-  if (meta) meta.setAttribute("content", `${p.name} in ${p.location}. ${p.beds} bedrooms, ${p.baths} bathrooms, ${num.format(p.area)} sq ft. ${p.summary}`);
+  if (meta) meta.setAttribute("content", `${rp.name} in ${rp.location}. ${p.beds} bedrooms, ${p.baths} bathrooms, ${num.format(p.area)} sq ft. ${rp.summary}`);
 
   const ctaLabel = p.status === "Coming soon" ? "Register interest" : "Request a private viewing";
   const related = properties.filter((x) => x.id !== p.id).slice(0, 3);

@@ -41,15 +41,15 @@
         <div class="contact-info reveal">
           <div class="contact-info__item">
             <i class="ph-light ph-buildings" aria-hidden="true"></i>
-            <div><h2 class="title-3">Studio</h2><p class="body-6 text-2">{{studio address}}<br>Monday to Saturday, 9am to 6pm</p></div>
+            <div><h2 class="title-3">Studio</h2><p class="body-6 text-2"><span data-setting="address">{{studio address}}</span><br><span data-setting="hours">Monday to Saturday, 9am to 6pm</span></p></div>
           </div>
           <div class="contact-info__item">
             <i class="ph-light ph-envelope-simple" aria-hidden="true"></i>
-            <div><h2 class="title-3">Email</h2><p class="body-6 text-2"><a href="mailto:hello@richmarchomes.com">hello@richmarchomes.com</a></p></div>
+            <div><h2 class="title-3">Email</h2><p class="body-6 text-2"><a href="mailto:hello@richmarchomes.com" data-setting="email">hello@richmarchomes.com</a></p></div>
           </div>
           <div class="contact-info__item">
             <i class="ph-light ph-phone" aria-hidden="true"></i>
-            <div><h2 class="title-3">Phone</h2><p class="body-6 text-2">{{phone number}}</p></div>
+            <div><h2 class="title-3">Phone</h2><p class="body-6 text-2"><a href="tel:+10000000000" data-setting="phone">{{phone number}}</a></p></div>
           </div>
           <div class="contact-info__item">
             <i class="ph-light ph-video-camera" aria-hidden="true"></i>
@@ -121,6 +121,7 @@
 
   <div data-footer></div>
 
+  <script src="js/content.js"></script>
   <script src="js/data.js"></script>
   <script src="js/render.js"></script>
   <script src="js/main.js"></script>
