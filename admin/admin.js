@@ -155,6 +155,7 @@
   let content = null;
   let savedJSON = "";
   let user = null;
+  let role = null;
   const $ = (s, r = document) => r.querySelector(s);
   const contentEl = $("[data-content]");
 
@@ -180,7 +181,7 @@
   const icon = (name) => h("i", { class: `ph-light ph-${name}`, "aria-hidden": "true" });
 
   async function api(path, body) {
-    const res = await fetch(path, {
+    const res = await fetch("../" + path, {
       method: body === undefined ? "GET" : "POST",
       headers: body === undefined ? {} : { "Content-Type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -188,7 +189,7 @@
     });
     let data = {};
     try { data = await res.json(); } catch (e) { /* empty */ }
-    if (res.status === 401 && path !== "/api/login") {
+    if (res.status === 401 && path !== "api/login") {
       showLogin("Your session has ended. Sign in again.");
     }
     if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
@@ -225,11 +226,12 @@
 
   async function showApp(session) {
     user = session.user;
-    content = await api("/api/content");
+    role = session.role;
+    content = await api("api/content");
     savedJSON = JSON.stringify(content);
     $("[data-view=login]").hidden = true;
     $("[data-view=app]").hidden = false;
-    $("[data-user]").textContent = user;
+    $("[data-user]").textContent = `${user} · ${role}`;
     $("[data-default-banner]").hidden = !session.defaultPassword;
     markDirty();
     route();
@@ -241,7 +243,7 @@
     const btn = f.querySelector("button");
     btn.disabled = true;
     try {
-      const s = await api("/api/login", { username: f.username.value.trim(), password: f.password.value });
+      const s = await api("api/login", { username: f.username.value.trim(), password: f.password.value });
       f.password.value = "";
       await showApp(s);
     } catch (err) {
@@ -253,7 +255,7 @@
 
   $("[data-logout]").addEventListener("click", async () => {
     if (isDirty() && !confirm("You have unpublished changes. Sign out and lose them?")) return;
-    await api("/api/logout", {}).catch(() => {});
+    await api("api/logout", {}).catch(() => {});
     content = null;
     savedJSON = "";
     markDirtySafe();
@@ -268,7 +270,7 @@
     const btn = $("[data-save]");
     btn.disabled = true;
     try {
-      await api("/api/content", content);
+      await api("api/content", content);
       savedJSON = JSON.stringify(content);
       markDirty();
       toast("Published. The site now shows your changes.");
@@ -312,7 +314,11 @@
         h("button", { class: "side__link", type: "button", "data-section-link": key, "aria-current": key === active ? "page" : null },
           icon(s.icon), s.label,
           s.single ? null : h("span", { class: "count" }, (content[key] || []).length))
-      )
+      ),
+      role === "admin"
+        ? h("button", { class: "side__link side__link--sep", type: "button", "data-section-link": "users", "aria-current": active === "users" ? "page" : null },
+            icon("users-three"), "Users")
+        : null
     );
   }
 
@@ -320,6 +326,11 @@
     const [section = "properties", idx] = location.hash.slice(1).split("/");
     window.scrollTo(0, 0);
     if (section === "account") { renderNav(null); return renderAccount(); }
+    if (section === "users") {
+      if (role !== "admin") return go("properties");
+      renderNav("users");
+      return renderUsers();
+    }
     const s = SECTIONS[section];
     if (!s) return go("properties");
     renderNav(section);
@@ -540,7 +551,7 @@
           r.onerror = rej;
           r.readAsDataURL(f);
         });
-        const out = await api("/api/upload", { name: f.name, data });
+        const out = await api("api/upload", { name: f.name, data });
         obj.src = out.url;
         src.value = out.url;
         preview.src = imgUrl(out.url);
@@ -581,47 +592,177 @@
   }
 
   /* ---------------------------------------------------------------------
-     Account
+     Account (own password)
      --------------------------------------------------------------------- */
+  function passwordFields() {
+    return [
+      h("label", { class: "field" }, h("span", {}, "New password"), h("input", { name: "password", type: "password", autocomplete: "new-password", minlength: "8", required: true }), h("small", {}, "At least 8 characters.")),
+      h("label", { class: "field" }, h("span", {}, "Confirm new password"), h("input", { name: "confirm", type: "password", autocomplete: "new-password", required: true }))
+    ];
+  }
+
   function renderAccount() {
     const err = h("p", { class: "msg msg--error", role: "alert" });
     const form = h("form", { class: "card", style: "max-width:520px", novalidate: true },
-      h("h2", {}, "Change login"),
-      h("label", { class: "field" }, h("span", {}, "Username"), h("input", { name: "username", value: user, autocomplete: "username" })),
+      h("h2", {}, "Change your password"),
+      h("label", { class: "field" }, h("span", {}, "Username"), h("input", { value: user, disabled: true, autocomplete: "username" })),
       h("label", { class: "field" }, h("span", {}, "Current password"), h("input", { name: "current", type: "password", autocomplete: "current-password", required: true })),
-      h("label", { class: "field" }, h("span", {}, "New password"), h("input", { name: "password", type: "password", autocomplete: "new-password", minlength: "8", required: true }), h("small", {}, "At least 8 characters.")),
-      h("label", { class: "field" }, h("span", {}, "Confirm new password"), h("input", { name: "confirm", type: "password", autocomplete: "new-password", required: true })),
+      ...passwordFields(),
       err,
-      h("div", {}, h("button", { class: "btn btn--primary", type: "submit" }, "Update login")));
+      h("div", {}, h("button", { class: "btn btn--primary", type: "submit" }, "Update password")));
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       err.textContent = "";
       if (form.password.value !== form.confirm.value) { err.textContent = "The new passwords don't match."; return; }
       try {
-        const out = await api("/api/password", { username: form.username.value, current: form.current.value, password: form.password.value });
-        user = out.user;
-        $("[data-user]").textContent = user;
+        await api("api/password", { current: form.current.value, password: form.password.value });
         $("[data-default-banner]").hidden = true;
         form.reset();
-        form.username.value = user;
-        toast("Login updated.");
+        toast("Password updated.");
       } catch (ex) {
         err.textContent = ex.message;
       }
     });
 
     contentEl.replaceChildren(
-      h("div", { class: "page-head" }, h("div", {}, h("h1", {}, "Account"), h("p", {}, "Change the admin username and password."))),
+      h("div", { class: "page-head" }, h("div", {}, h("h1", {}, "Account"), h("p", {}, `Signed in as ${user} (${role}).`))),
       form);
   }
 
   /* ---------------------------------------------------------------------
+     Users (admins only)
+     --------------------------------------------------------------------- */
+  const dateFmt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" });
+  const when = (iso) => (iso ? dateFmt.format(new Date(iso)) : "Never");
+
+  async function renderUsers() {
+    contentEl.replaceChildren(h("p", { class: "muted" }, "Loading users…"));
+    let users;
+    try {
+      ({ users } = await api("api/users"));
+    } catch (ex) {
+      contentEl.replaceChildren(h("p", { class: "msg msg--error" }, ex.message));
+      return;
+    }
+    const admins = users.filter((u) => u.role === "admin").length;
+
+    const rows = users.map((u) => {
+      const isMe = u.username === user;
+      const roleSel = h("select", { "aria-label": `Role for ${u.username}`, class: "role-select" },
+        h("option", { value: "admin", selected: u.role === "admin" || null }, "Admin"),
+        h("option", { value: "editor", selected: u.role === "editor" || null }, "Editor"));
+      roleSel.disabled = u.role === "admin" && admins <= 1;
+      roleSel.title = roleSel.disabled ? "Keep at least one admin" : "";
+      roleSel.addEventListener("change", async () => {
+        if (isMe && roleSel.value !== "admin" && !confirm("Remove your own admin access? You won't be able to manage users afterwards.")) {
+          roleSel.value = "admin";
+          return;
+        }
+        try {
+          await api("api/users/role", { username: u.username, role: roleSel.value });
+          toast(`${u.username} is now ${roleSel.value === "admin" ? "an admin" : "an editor"}.`);
+          if (isMe) {
+            role = roleSel.value;
+            $("[data-user]").textContent = `${user} · ${role}`;
+            return go("properties");
+          }
+          renderUsers();
+        } catch (ex) {
+          toast(ex.message, true);
+          roleSel.value = u.role;
+        }
+      });
+
+      return h("div", { class: "row" },
+        h("span", { class: "avatar" }, u.username.slice(0, 2).toUpperCase()),
+        h("div", { class: "row__main", style: "cursor:default" },
+          h("span", { class: "row__title" }, u.username, isMe ? h("span", { class: "muted" }, " (you)") : null),
+          h("span", { class: "row__sub" }, `Last sign in: ${when(u.lastLogin)}`, u.defaultPassword ? " · default password" : "")),
+        roleSel,
+        h("div", { class: "row__actions" },
+          h("button", { class: "icon-btn", type: "button", title: "Set a new password", "aria-label": `Set a new password for ${u.username}`, onclick: () => resetPassword(u.username) }, icon("key")),
+          h("button", {
+            class: "icon-btn icon-btn--danger", type: "button",
+            title: isMe ? "You can't delete yourself" : "Delete user",
+            "aria-label": `Delete ${u.username}`,
+            disabled: isMe || (u.role === "admin" && admins <= 1),
+            onclick: async () => {
+              if (!confirm(`Delete the user "${u.username}"? They will lose access immediately.`)) return;
+              try {
+                await api("api/users/delete", { username: u.username });
+                toast(`${u.username} was deleted.`);
+                renderUsers();
+              } catch (ex) { toast(ex.message, true); }
+            }
+          }, icon("trash"))));
+    });
+
+    // Add user form
+    const err = h("p", { class: "msg msg--error", role: "alert" });
+    const form = h("form", { class: "card", novalidate: true },
+      h("h2", {}, "Add a user"),
+      h("div", { class: "grid" },
+        h("label", { class: "field" }, h("span", {}, "Username"), h("input", { name: "username", autocomplete: "off", required: true, placeholder: "e.g. jane" }), h("small", {}, "3 to 32 characters: letters, numbers, . _ -")),
+        h("label", { class: "field" }, h("span", {}, "Role"),
+          h("select", { name: "role" },
+            h("option", { value: "editor" }, "Editor: edits site content"),
+            h("option", { value: "admin" }, "Admin: edits content and manages users"))),
+        ...passwordFields()),
+      err,
+      h("div", {}, h("button", { class: "btn btn--primary", type: "submit" }, icon("user-plus"), "Add user")));
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      err.textContent = "";
+      if (form.password.value !== form.confirm.value) { err.textContent = "The passwords don't match."; return; }
+      const name = form.username.value.trim().toLowerCase();
+      try {
+        await api("api/users/create", { username: name, role: form.role.value, password: form.password.value });
+        toast(`User ${name} added.`);
+        renderUsers();
+      } catch (ex) {
+        err.textContent = ex.message;
+      }
+    });
+
+    contentEl.replaceChildren(
+      h("div", { class: "page-head" },
+        h("div", {}, h("h1", {}, "Users"), h("p", {}, "Admins edit content and manage users. Editors edit content only."))),
+      h("div", { class: "editor" }, h("div", { class: "list" }, rows), form));
+  }
+
+  async function resetPassword(username) {
+    const pw = prompt(`New password for ${username} (at least 8 characters):`);
+    if (pw == null) return;
+    try {
+      await api("api/users/password", { username, password: pw });
+      toast(`Password updated for ${username}. Share it with them privately.`);
+      renderUsers();
+    } catch (ex) {
+      toast(ex.message, true);
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     Backup download
+     --------------------------------------------------------------------- */
+  $("[data-backup]").addEventListener("click", () => {
+    if (!content) return;
+    const blob = new Blob([JSON.stringify(JSON.parse(savedJSON), null, 2)], { type: "application/json" });
+    const a = h("a", { href: URL.createObjectURL(blob), download: `richmarc-content-${new Date().toISOString().slice(0, 10)}.json` });
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+
+  /* ---------------------------------------------------------------------
      Boot
      --------------------------------------------------------------------- */
-  api("/api/session")
+  api("api/session")
     .then((s) => (s.user ? showApp(s) : showLogin()))
     .catch(() => {
-      showLogin("Can't reach the admin server. Start it with: python server.py");
+      showLogin("Can't reach the admin API. To run it locally, use: npm run dev");
     });
 })();

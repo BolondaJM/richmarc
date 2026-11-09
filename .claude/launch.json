@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "richmarc",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["server.py", "5173"],
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "wrangler@4.159.0", "pages", "dev", ".", "--kv", "RICHMARC_KV", "--port", "5173"],
       "port": 5173
     }
   ]

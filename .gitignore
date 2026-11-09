@@ -1,4 +1,3 @@
-data/admin.json
-data/backups/
-data/*.tmp
-__pycache__/
+node_modules/
+.wrangler/
+.dev.vars
