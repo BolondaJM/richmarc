@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "include": [
+    "/api/*",
+    "/js/content.js",
+    "/data/*",
+    "/functions/*",
+    "/.git/*",
+    "/.claude/*",
+    "/.agents/*",
+    "/skills-lock.json",
+    "/README.md",
+    "/_routes.json",
+    "/.gitignore"
+  ],
+  "exclude": []
+}
