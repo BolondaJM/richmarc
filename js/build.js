@@ -16,7 +16,7 @@
   const breakdownEl = document.querySelector("[data-breakdown]");
   const ctaEl = document.querySelector("[data-estimate-cta]");
 
-  let tier = buildRates.tiers[1].id;
+  let tier = (buildRates.tiers[1] || buildRates.tiers[0]).id;
 
   tiersEl.innerHTML = buildRates.tiers
     .map(

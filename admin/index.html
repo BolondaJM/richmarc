@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin | Richmarc Homes</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- Login -->
+  <main class="login" data-view="login" hidden>
+    <form class="login__card" data-login novalidate>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 21V9.5L12 3l9 6.5V21" stroke="currentColor" stroke-width="1"/><path d="M8 21v-7h8v7" stroke="#c9a96e" stroke-width="1"/></svg>
+        <span>Richmarc <em>Admin</em></span>
+      </div>
+      <h1>Sign in</h1>
+      <label class="field"><span>Username</span><input name="username" autocomplete="username" required autofocus></label>
+      <label class="field"><span>Password</span><input name="password" type="password" autocomplete="current-password" required></label>
+      <p class="msg msg--error" data-login-error role="alert"></p>
+      <button class="btn btn--primary" type="submit">Sign in</button>
+      <a class="muted small" href="../index.html">Back to the website</a>
+    </form>
+  </main>
+
+  <!-- App -->
+  <div class="app" data-view="app" hidden>
+    <aside class="side">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 21V9.5L12 3l9 6.5V21" stroke="currentColor" stroke-width="1"/><path d="M8 21v-7h8v7" stroke="#c9a96e" stroke-width="1"/></svg>
+        <span>Richmarc <em>Admin</em></span>
+      </div>
+      <nav class="side__nav" data-nav></nav>
+      <div class="side__foot">
+        <a class="side__link" href="../index.html" target="_blank" rel="noopener"><i class="ph-light ph-arrow-square-out"></i>View site</a>
+        <button class="side__link" type="button" data-section-link="account"><i class="ph-light ph-user-circle"></i><span data-user>admin</span></button>
+        <button class="side__link" type="button" data-logout><i class="ph-light ph-sign-out"></i>Sign out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="banner" data-default-banner hidden>
+        <i class="ph-light ph-warning"></i>
+        <span>You're using the default test login (admin / admin). Change it before the site goes live.</span>
+        <button class="btn btn--ghost btn--sm" type="button" data-section-link="account">Change password</button>
+      </div>
+      <div data-content></div>
+    </main>
+
+    <div class="savebar" data-savebar>
+      <span data-save-status>All changes saved</span>
+      <div class="savebar__actions">
+        <button class="btn btn--ghost btn--sm" type="button" data-discard>Discard</button>
+        <button class="btn btn--primary btn--sm" type="button" data-save>Publish changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" data-toast role="status" aria-live="polite"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
